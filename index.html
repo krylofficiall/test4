@@ -1,1 +1,1078 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тренажёр User Stories</title>
+    <!--
+    ═══════════════════════════════════════════════════════════════
+    📸 ИНСТРУКЦИЯ ПО ДОБАВЛЕНИЮ ИЗОБРАЖЕНИЙ
+    ═══════════════════════════════════════════════════════════════
+    
+    Положи все изображения в ту же папку, где находится этот HTML файл!
+    
+    СПИСОК НУЖНЫХ ИЗОБРАЖЕНИЙ (5 штук):
+    
+    1. beat-saber.jpg       - Игра Beat Saber (музыкальная VR-игра)
+    2. public-speaking.jpg  - VR-тренажёр публичных выступлений
+    3. dungeon-quest.jpg    - VR-игра квест в подземелье
+    4. virtual-museum.jpg   - VR-приложение виртуальный музей
+    5. space-racing.jpg     - VR-игра космические гонки
+    
+    ТРЕБОВАНИЯ К ФОТО:
+    - Формат: JPG или PNG
+    - Размер: 800x400 пикселей (или пропорционально)
+    - Вес: до 500 КБ каждое
+    
+    АЛЬТЕРНАТИВА:
+    Если нет фото - приложение будет работать с заглушками!
+    ═══════════════════════════════════════════════════════════════
+    -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.5em;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .progress-text {
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .stars {
+            font-size: 1.5em;
+        }
+
+        .progress-bar-outer {
+            background: rgba(255,255,255,0.3);
+            height: 8px;
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: #ffd700;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .content {
+            padding: 40px;
+            min-height: 500px;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .start-screen {
+            text-align: center;
+        }
+
+        .start-screen h2 {
+            color: #333;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+
+        .start-screen p {
+            color: #666;
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .instruction-box {
+            background: linear-gradient(135deg, #f093fb15 0%, #f5576c15 100%);
+            border-left: 4px solid #f5576c;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .instruction-box h3 {
+            color: #f5576c;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .instruction-box ul {
+            color: #666;
+            padding-left: 25px;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(245, 87, 108, 0.4);
+        }
+
+        .scenario-header {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .scenario-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .scenario-image-placeholder {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .scenario-header h3 {
+            color: #333;
+            font-size: 1.6em;
+            margin-bottom: 15px;
+        }
+
+        .scenario-description {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .persona-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .persona-card {
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .persona-card:hover {
+            border-color: #f5576c;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(245, 87, 108, 0.2);
+        }
+
+        .persona-card.selected {
+            border-color: #f5576c;
+            background: linear-gradient(135deg, #f093fb15 0%, #f5576c15 100%);
+        }
+
+        .persona-emoji {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .persona-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        .persona-desc {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .story-builder {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .story-part {
+            margin-bottom: 30px;
+        }
+
+        .part-label {
+            color: #f5576c;
+            font-weight: 600;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .drop-zone {
+            background: white;
+            border: 3px dashed #ccc;
+            border-radius: 15px;
+            min-height: 70px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-align: center;
+            color: #999;
+            font-style: italic;
+        }
+
+        .drop-zone.drag-over {
+            border-color: #f5576c;
+            background: #fff5f7;
+            border-style: solid;
+        }
+
+        .drop-zone.filled {
+            border-style: solid;
+            border-color: #f5576c;
+            background: linear-gradient(135deg, #f093fb15 0%, #f5576c15 100%);
+            color: #333;
+            font-style: normal;
+        }
+
+        .options-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .draggable-option {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: move;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            user-select: none;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+            font-size: 1em;
+        }
+
+        .draggable-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .draggable-option.dragging {
+            opacity: 0.5;
+        }
+
+        .draggable-option.used {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .theme-selection {
+            margin: 30px 0;
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .theme-card {
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+        }
+
+        .theme-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        }
+
+        .theme-emoji {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+
+        .theme-name {
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .feedback {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            z-index: 1000;
+            max-width: 500px;
+            transition: transform 0.3s ease;
+        }
+
+        .feedback.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .feedback-emoji {
+            font-size: 6em;
+            margin-bottom: 20px;
+            animation: bounce 0.5s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        .final-screen {
+            text-align: center;
+        }
+
+        .final-emoji {
+            font-size: 7em;
+            margin: 30px 0;
+        }
+
+        .final-score {
+            font-size: 3em;
+            color: #f5576c;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            .persona-selection {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 Тренажёр User Stories</h1>
+            <div class="progress-container">
+                <div class="progress-text"><span id="currentStory">0</span>/5</div>
+                <div class="stars" id="starsDisplay">⭐ 0</div>
+            </div>
+        </div>
+        <div class="progress-bar-outer">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="content">
+            <!-- Стартовый экран -->
+            <div class="screen active" id="startScreen">
+                <div class="start-screen">
+                    <h2>🎯 Научись писать User Stories!</h2>
+                    <p>Создай 5 пользовательских историй для VR-приложений</p>
+                    
+                    <div class="instruction-box">
+                        <h3>📋 Как это работает:</h3>
+                        <ul>
+                            <li>Тебе покажут VR-приложение</li>
+                            <li>Выбери пользователя (User Persona)</li>
+                            <li>Собери User Story из трёх частей:<br>
+                                <strong>"Как [кто], я хочу [что], чтобы [зачем]"</strong>
+                            </li>
+                            <li>Определи тему истории</li>
+                            <li>Получи звёзды за правильные ответы! ⭐</li>
+                        </ul>
+                    </div>
+
+                    <p style="color: #999; font-size: 1em;">⏱️ Займёт 15 минут</p>
+                    <button class="btn" onclick="startStory(1)">Начать!</button>
+                </div>
+            </div>
+
+            <!-- Экран выбора персоны -->
+            <div class="screen" id="personaScreen">
+                <div class="scenario-header">
+                    <div id="scenarioImage">
+                        <!-- 📸 СЮДА ЗАГРУЗИТСЯ ИЗОБРАЖЕНИЕ ИГРЫ -->
+                    </div>
+                    <h3 id="scenarioTitle"></h3>
+                    <div class="scenario-description" id="scenarioDesc"></div>
+                </div>
+
+                <h3 style="color: #333; margin-bottom: 20px; text-align: center;">👤 Шаг 1: Выбери пользователя</h3>
+                
+                <div class="persona-selection" id="personaOptions"></div>
+
+                <div class="buttons">
+                    <button class="btn" id="personaNextBtn" onclick="selectPersona()" style="display: none;">Далее →</button>
+                </div>
+            </div>
+
+            <!-- Экран создания истории -->
+            <div class="screen" id="storyScreen">
+                <div class="scenario-header">
+                    <div id="scenarioImage2">
+                        <!-- 📸 СЮДА ЗАГРУЗИТСЯ ИЗОБРАЖЕНИЕ ИГРЫ -->
+                    </div>
+                    <h3 id="scenarioTitle2"></h3>
+                    <div style="background: white; padding: 15px; border-radius: 10px; margin-top: 15px;">
+                        <strong>👤 Пользователь:</strong> <span id="selectedPersona"></span>
+                    </div>
+                </div>
+
+                <h3 style="color: #333; margin-bottom: 20px; text-align: center;">✍️ Шаг 2: Собери User Story</h3>
+
+                <div class="story-builder">
+                    <div class="story-part">
+                        <div class="part-label">1️⃣ Как...</div>
+                        <div class="drop-zone" data-part="who" id="dropWho">Перетащи сюда роль пользователя</div>
+                        <div class="options-pool" id="whoOptions"></div>
+                    </div>
+
+                    <div class="story-part">
+                        <div class="part-label">2️⃣ Я хочу...</div>
+                        <div class="drop-zone" data-part="what" id="dropWhat">Перетащи сюда желаемое действие</div>
+                        <div class="options-pool" id="whatOptions"></div>
+                    </div>
+
+                    <div class="story-part">
+                        <div class="part-label">3️⃣ Чтобы...</div>
+                        <div class="drop-zone" data-part="why" id="dropWhy">Перетащи сюда цель/выгоду</div>
+                        <div class="options-pool" id="whyOptions"></div>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button class="btn" id="storyNextBtn" onclick="goToTheme()" style="display: none;">Далее →</button>
+                </div>
+            </div>
+
+            <!-- Экран выбора темы -->
+            <div class="screen" id="themeScreen">
+                <h3 style="color: #333; margin-bottom: 20px; text-align: center;">🎯 Шаг 3: Какая тема у этой истории?</h3>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 15px; margin-bottom: 30px;">
+                    <strong style="color: #f5576c;">Твоя User Story:</strong>
+                    <p id="finalStory" style="margin-top: 10px; font-size: 1.1em; line-height: 1.6; color: #333;"></p>
+                </div>
+
+                <div class="theme-selection">
+                    <div class="theme-grid" id="themeOptions"></div>
+                </div>
+
+                <div class="buttons">
+                    <button class="btn" onclick="checkStory()">Проверить! 🎯</button>
+                </div>
+            </div>
+
+            <!-- Финальный экран -->
+            <div class="screen" id="finalScreen">
+                <div class="final-screen">
+                    <div class="final-emoji">🏆</div>
+                    <h2>Невероятно!</h2>
+                    <div class="final-score"><span id="finalStars">0</span> ⭐</div>
+                    <p style="font-size: 1.3em; color: #666; margin: 20px 0;" id="finalMessage"></p>
+                    <div class="buttons">
+                        <button class="btn" onclick="restart()">Пройти заново</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="feedback" id="feedback"></div>
+
+    <script>
+        const stories = [
+            {
+                title: "VR-игра 'Beat Saber'",
+                description: "Музыкальная VR-игра, где нужно рубить кубики световыми мечами в такт музыке",
+                image: "beat-saber.jpg",  // 📸 ИМЯ ФАЙЛА: beat-saber.jpg
+                imageAlt: "Beat Saber VR игра",
+                imagePlaceholder: "🎵",
+                personas: [
+                    { emoji: "👧", name: "Лена, 12 лет", desc: "Любит музыку и танцы", correct: true },
+                    { emoji: "👨‍💼", name: "Олег, 50 лет", desc: "Офисный работник", correct: false },
+                    { emoji: "👶", name: "Малыш, 4 года", desc: "Дошкольник", correct: false }
+                ],
+                who: [
+                    { text: "игрок-новичок", correct: true },
+                    { text: "профессиональный музыкант", correct: false },
+                    { text: "бабушка", correct: false }
+                ],
+                what: [
+                    { text: "видеть подсказки ритма", correct: true },
+                    { text: "играть на скрипке", correct: false },
+                    { text: "готовить еду", correct: false }
+                ],
+                why: [
+                    { text: "научиться попадать в ритм", correct: true },
+                    { text: "стать известным", correct: false },
+                    { text: "похудеть", correct: false }
+                ],
+                themes: [
+                    { emoji: "🎓", name: "Обучение", correct: true },
+                    { emoji: "🎮", name: "Геймплей", correct: false },
+                    { emoji: "⚙️", name: "Настройки", correct: false }
+                ]
+            },
+            {
+                title: "VR-тренажёр 'Публичные выступления'",
+                description: "Приложение для тренировки навыков публичных выступлений перед виртуальной аудиторией",
+                image: "public-speaking.jpg",  // 📸 ИМЯ ФАЙЛА: public-speaking.jpg
+                imageAlt: "VR тренажёр публичных выступлений",
+                imagePlaceholder: "🎤",
+                personas: [
+                    { emoji: "🎓", name: "Саша, 16 лет", desc: "Школьник, боится выступать", correct: true },
+                    { emoji: "👶", name: "Дима, 5 лет", desc: "Детсадовец", correct: false },
+                    { emoji: "🧓", name: "Пенсионер, 70 лет", desc: "На пенсии", correct: false }
+                ],
+                who: [
+                    { text: "человек с боязнью публики", correct: true },
+                    { text: "профессиональный актёр", correct: false },
+                    { text: "космонавт", correct: false }
+                ],
+                what: [
+                    { text: "настраивать размер аудитории", correct: true },
+                    { text: "летать в космосе", correct: false },
+                    { text: "играть в футбол", correct: false }
+                ],
+                why: [
+                    { text: "начать с малого и постепенно привыкнуть", correct: true },
+                    { text: "стать звездой TikTok", correct: false },
+                    { text: "победить в олимпиаде", correct: false }
+                ],
+                themes: [
+                    { emoji: "⚙️", name: "Настройки", correct: true },
+                    { emoji: "🎮", name: "Геймплей", correct: false },
+                    { emoji: "🗺️", name: "Навигация", correct: false }
+                ]
+            },
+            {
+                title: "VR-игра 'Квест в подземелье'",
+                description: "Приключенческая игра с исследованием тёмных пещер и поиском сокровищ",
+                image: "dungeon-quest.jpg",  // 📸 ИМЯ ФАЙЛА: dungeon-quest.jpg
+                imageAlt: "VR квест в подземелье",
+                imagePlaceholder: "🗺️",
+                personas: [
+                    { emoji: "🧒", name: "Максим, 14 лет", desc: "Любит приключения", correct: true },
+                    { emoji: "👨‍⚕️", name: "Врач, 40 лет", desc: "Работает в больнице", correct: false },
+                    { emoji: "🐱", name: "Кот Мурзик", desc: "Домашний питомец", correct: false }
+                ],
+                who: [
+                    { text: "игрок в VR", correct: true },
+                    { text: "повар в ресторане", correct: false },
+                    { text: "учитель математики", correct: false }
+                ],
+                what: [
+                    { text: "телепортироваться к сохранённой точке", correct: true },
+                    { text: "печь пиццу", correct: false },
+                    { text: "стричь газон", correct: false }
+                ],
+                why: [
+                    { text: "не проходить длинный путь заново", correct: true },
+                    { text: "научиться летать", correct: false },
+                    { text: "выучить английский", correct: false }
+                ],
+                themes: [
+                    { emoji: "🗺️", name: "Навигация", correct: true },
+                    { emoji: "🎓", name: "Обучение", correct: false },
+                    { emoji: "👥", name: "Социальное", correct: false }
+                ]
+            },
+            {
+                title: "VR-приложение 'Виртуальный музей'",
+                description: "Образовательное приложение с виртуальными экскурсиями по музеям мира",
+                image: "virtual-museum.jpg",  // 📸 ИМЯ ФАЙЛА: virtual-museum.jpg
+                imageAlt: "Виртуальный музей VR",
+                imagePlaceholder: "🏛️",
+                personas: [
+                    { emoji: "👧", name: "Катя, 11 лет", desc: "Интересуется историей", correct: true },
+                    { emoji: "🏃", name: "Спортсмен, 25 лет", desc: "Профессиональный бегун", correct: false },
+                    { emoji: "👽", name: "Инопланетянин", desc: "С Марса", correct: false }
+                ],
+                who: [
+                    { text: "ученик на уроке", correct: true },
+                    { text: "пилот самолёта", correct: false },
+                    { text: "зомби", correct: false }
+                ],
+                what: [
+                    { text: "слушать аудиогид не снимая шлем", correct: true },
+                    { text: "управлять вертолётом", correct: false },
+                    { text: "варить суп", correct: false }
+                ],
+                why: [
+                    { text: "узнавать факты об экспонатах", correct: true },
+                    { text: "стать миллионером", correct: false },
+                    { text: "научиться танцевать", correct: false }
+                ],
+                themes: [
+                    { emoji: "🖼️", name: "Интерфейс", correct: true },
+                    { emoji: "🎮", name: "Геймплей", correct: false },
+                    { emoji: "🔒", name: "Безопасность", correct: false }
+                ]
+            },
+            {
+                title: "VR-игра 'Космические гонки'",
+                description: "Динамичная гоночная игра на космических кораблях с высокой скоростью",
+                image: "space-racing.jpg",  // 📸 ИМЯ ФАЙЛА: space-racing.jpg
+                imageAlt: "Космические гонки VR",
+                imagePlaceholder: "🚀",
+                personas: [
+                    { emoji: "🧑", name: "Артём, 13 лет", desc: "Любит быстрые игры", correct: true },
+                    { emoji: "👴", name: "Дедушка, 80 лет", desc: "Пенсионер", correct: false },
+                    { emoji: "🦖", name: "Динозавр", desc: "Тираннозавр", correct: false }
+                ],
+                who: [
+                    { text: "игрок, которого укачивает", correct: true },
+                    { text: "балерина", correct: false },
+                    { text: "супергерой", correct: false }
+                ],
+                what: [
+                    { text: "включить режим уменьшения укачивания", correct: true },
+                    { text: "испечь торт", correct: false },
+                    { text: "спасти мир", correct: false }
+                ],
+                why: [
+                    { text: "играть комфортно без тошноты", correct: true },
+                    { text: "выиграть в лотерею", correct: false },
+                    { text: "найти сокровища", correct: false }
+                ],
+                themes: [
+                    { emoji: "⚙️", name: "Настройки", correct: true },
+                    { emoji: "🎮", name: "Геймплей", correct: false },
+                    { emoji: "👥", name: "Социальное", correct: false }
+                ]
+            }
+        ];
+
+        let currentStoryIndex = 0;
+        let totalStars = 0;
+        let selectedPersona = null;
+        let selectedParts = { who: null, what: null, why: null };
+        let selectedTheme = null;
+        let draggedElement = null;
+
+        function startStory(index) {
+            currentStoryIndex = index - 1;
+            showPersonaScreen();
+        }
+
+        function showPersonaScreen() {
+            const story = stories[currentStoryIndex];
+            
+            // Создаём HTML с изображением
+            let imageHTML = '';
+            const img = new Image();
+            img.src = story.image;
+            
+            // Проверяем, существует ли изображение
+            img.onerror = function() {
+                // Если изображения нет, показываем заглушку с эмодзи
+                document.getElementById('scenarioImage').innerHTML = 
+                    '<div class="scenario-image-placeholder">' + story.imagePlaceholder + '</div>';
+            };
+            img.onload = function() {
+                // Если изображение есть, показываем его
+                document.getElementById('scenarioImage').innerHTML = 
+                    '<img src="' + story.image + '" alt="' + story.imageAlt + '" class="scenario-image">';
+            };
+            
+            document.getElementById('scenarioTitle').textContent = story.title;
+            document.getElementById('scenarioDesc').textContent = story.description;
+            
+            const personaOptions = document.getElementById('personaOptions');
+            personaOptions.innerHTML = '';
+            
+            story.personas.forEach((persona, idx) => {
+                const card = document.createElement('div');
+                card.className = 'persona-card';
+                card.onclick = function() { choosePersona(idx); };
+                card.innerHTML = '<div class="persona-emoji">' + persona.emoji + '</div>' +
+                    '<div class="persona-name">' + persona.name + '</div>' +
+                    '<div class="persona-desc">' + persona.desc + '</div>';
+                personaOptions.appendChild(card);
+            });
+            
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('personaScreen').classList.add('active');
+            document.getElementById('personaNextBtn').style.display = 'none';
+            selectedPersona = null;
+        }
+
+        function choosePersona(index) {
+            selectedPersona = index;
+            document.querySelectorAll('.persona-card').forEach((c, i) => {
+                if (i === index) {
+                    c.classList.add('selected');
+                } else {
+                    c.classList.remove('selected');
+                }
+            });
+            document.getElementById('personaNextBtn').style.display = 'inline-block';
+        }
+
+        function selectPersona() {
+            const story = stories[currentStoryIndex];
+            document.getElementById('scenarioTitle2').textContent = story.title;
+            document.getElementById('selectedPersona').textContent = story.personas[selectedPersona].name;
+            
+            // Добавляем изображение на второй экран
+            const img = new Image();
+            img.src = story.image;
+            img.onerror = function() {
+                document.getElementById('scenarioImage2').innerHTML = 
+                    '<div class="scenario-image-placeholder">' + story.imagePlaceholder + '</div>';
+            };
+            img.onload = function() {
+                document.getElementById('scenarioImage2').innerHTML = 
+                    '<img src="' + story.image + '" alt="' + story.imageAlt + '" class="scenario-image">';
+            };
+            
+            initStoryBuilder();
+            
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('storyScreen').classList.add('active');
+        }
+
+        function initStoryBuilder() {
+            const story = stories[currentStoryIndex];
+            selectedParts = { who: null, what: null, why: null };
+            
+            ['who', 'what', 'why'].forEach(part => {
+                const container = document.getElementById(part + 'Options');
+                container.innerHTML = '';
+                
+                story[part].forEach((option, idx) => {
+                    const opt = document.createElement('div');
+                    opt.className = 'draggable-option';
+                    opt.draggable = true;
+                    opt.textContent = option.text;
+                    opt.dataset.part = part;
+                    opt.dataset.index = idx;
+                    opt.addEventListener('dragstart', handleDragStart);
+                    opt.addEventListener('dragend', handleDragEnd);
+                    container.appendChild(opt);
+                });
+            });
+            
+            ['who', 'what', 'why'].forEach(part => {
+                const zone = document.getElementById('drop' + part.charAt(0).toUpperCase() + part.slice(1));
+                zone.innerHTML = zone.dataset.part === 'who' ? 'Перетащи сюда роль пользователя' :
+                    zone.dataset.part === 'what' ? 'Перетащи сюда желаемое действие' :
+                    'Перетащи сюда цель/выгоду';
+                zone.classList.remove('filled');
+                zone.addEventListener('dragover', handleDragOver);
+                zone.addEventListener('drop', handleDrop);
+                zone.addEventListener('dragleave', handleDragLeave);
+            });
+            
+            document.getElementById('storyNextBtn').style.display = 'none';
+        }
+
+        function handleDragStart(e) {
+            draggedElement = this;
+            this.classList.add('dragging');
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            this.classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            this.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+            
+            if (!draggedElement) return;
+            
+            const targetPart = this.dataset.part;
+            const draggedPart = draggedElement.dataset.part;
+            
+            if (targetPart !== draggedPart) return;
+            
+            this.textContent = draggedElement.textContent;
+            this.classList.add('filled');
+            
+            selectedParts[targetPart] = parseInt(draggedElement.dataset.index);
+            
+            draggedElement.classList.add('used');
+            draggedElement = null;
+            
+            checkStoryComplete();
+        }
+
+        function checkStoryComplete() {
+            if (selectedParts.who !== null && selectedParts.what !== null && selectedParts.why !== null) {
+                document.getElementById('storyNextBtn').style.display = 'inline-block';
+            }
+        }
+
+        function goToTheme() {
+            const story = stories[currentStoryIndex];
+            const storyText = 'Как ' + story.who[selectedParts.who].text + ', я хочу ' + 
+                story.what[selectedParts.what].text + ', чтобы ' + story.why[selectedParts.why].text;
+            
+            document.getElementById('finalStory').textContent = storyText;
+            
+            const themeOptions = document.getElementById('themeOptions');
+            themeOptions.innerHTML = '';
+            
+            story.themes.forEach((theme, idx) => {
+                const card = document.createElement('div');
+                card.className = 'theme-card';
+                card.onclick = function() { chooseTheme(idx); };
+                card.innerHTML = '<div class="theme-emoji">' + theme.emoji + '</div>' +
+                    '<div class="theme-name">' + theme.name + '</div>';
+                themeOptions.appendChild(card);
+            });
+            
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('themeScreen').classList.add('active');
+            selectedTheme = null;
+        }
+
+        function chooseTheme(index) {
+            selectedTheme = index;
+            document.querySelectorAll('.theme-card').forEach((c, i) => {
+                if (i === index) {
+                    c.classList.add('selected');
+                } else {
+                    c.classList.remove('selected');
+                }
+            });
+        }
+
+        function checkStory() {
+            const story = stories[currentStoryIndex];
+            let stars = 0;
+            
+            if (story.personas[selectedPersona].correct) stars += 2;
+            if (story.who[selectedParts.who].correct) stars += 2;
+            if (story.what[selectedParts.what].correct) stars += 2;
+            if (story.why[selectedParts.why].correct) stars += 2;
+            if (selectedTheme !== null && story.themes[selectedTheme].correct) stars += 2;
+            
+            totalStars += stars;
+            updateProgress();
+            
+            const messages = [
+                { min: 10, emoji: '🎉', title: 'Идеально!', text: 'Ты создал безупречную User Story! +' + stars + ' звёзд!' },
+                { min: 8, emoji: '🌟', title: 'Отлично!', text: 'Почти идеально! +' + stars + ' звёзд!' },
+                { min: 6, emoji: '👍', title: 'Хорошо!', text: 'Неплохая история! +' + stars + ' звёзд!' },
+                { min: 0, emoji: '💪', title: 'Стараешься!', text: 'Продолжай практиковаться! +' + stars + ' звёзд!' }
+            ];
+            
+            const msg = messages.find(m => stars >= m.min);
+            
+            showFeedback(msg.emoji, msg.title, msg.text, function() {
+                if (currentStoryIndex < 4) {
+                    currentStoryIndex++;
+                    showPersonaScreen();
+                } else {
+                    showFinalScreen();
+                }
+            });
+        }
+
+        function showFeedback(emoji, title, text, callback) {
+            const feedback = document.getElementById('feedback');
+            const overlay = document.getElementById('overlay');
+            
+            feedback.innerHTML = '<div class="feedback-emoji">' + emoji + '</div>' +
+                '<h2>' + title + '</h2><p style="font-size: 1.2em; margin: 20px 0;">' + text + '</p>' +
+                '<button class="btn" onclick="handleFeedbackClose()">Продолжить</button>';
+            
+            window.feedbackCallback = callback;
+            
+            overlay.classList.add('show');
+            feedback.classList.add('show');
+        }
+
+        function handleFeedbackClose() {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('feedback').classList.remove('show');
+            if (window.feedbackCallback) {
+                window.feedbackCallback();
+                window.feedbackCallback = null;
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentStoryIndex + 1) / 5) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('currentStory').textContent = currentStoryIndex + 1;
+            document.getElementById('starsDisplay').textContent = '⭐ ' + totalStars;
+        }
+
+        function showFinalScreen() {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('finalScreen').classList.add('active');
+            document.getElementById('finalStars').textContent = totalStars;
+            
+            let message = '';
+            if (totalStars === 50) {
+                message = 'Ты мастер User Stories! Все 5 историй идеальны! 🏆';
+            } else if (totalStars >= 40) {
+                message = 'Потрясающий результат! Ты отлично разбираешься в User Stories! 🌟';
+            } else if (totalStars >= 30) {
+                message = 'Отличная работа! Продолжай практиковаться! 👍';
+            } else {
+                message = 'Хорошее начало! Попробуй ещё раз и будет ещё лучше! 💪';
+            }
+            
+            document.getElementById('finalMessage').textContent = message;
+        }
+
+        function restart() {
+            currentStoryIndex = 0;
+            totalStars = 0;
+            updateProgress();
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('startScreen').classList.add('active');
+        }
+    </script>
+</body>
+</html>
+<!--
+═══════════════════════════════════════════════════════════════
+📸 КРАТКАЯ ИНСТРУКЦИЯ ПО ДОБАВЛЕНИЮ ФОТО
+═══════════════════════════════════════════════════════════════
+
+ШАГ 1: Найди или создай 5 изображений VR-игр
+
+ШАГ 2: Назови их ТОЧНО так:
+   beat-saber.jpg
+   public-speaking.jpg
+   dungeon-quest.jpg
+   virtual-museum.jpg
+   space-racing.jpg
+
+ШАГ 3: Положи их в ТУ ЖЕ ПАПКУ, где лежит этот HTML файл
+
+ГОТОВО! Обнови страницу - изображения появятся автоматически!
+
+ПРИМЕЧАНИЕ: Если какого-то фото нет - вместо него будет 
+            красивая заглушка с эмодзи 😊
+
+═══════════════════════════════════════════════════════════════
+-->
